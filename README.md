@@ -1,2 +1,2 @@
-# oh-my-configs
+# my-configs
 some configs
