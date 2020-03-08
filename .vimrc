@@ -57,7 +57,7 @@ function MyDiff()
   silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
 endfunction
 
-colorscheme darkburn 
+colorscheme darkburn
 
 set encoding=utf-8
 set nowrap
@@ -95,6 +95,8 @@ if has("cscope")
   set csverb
 endif
 
+set cscopequickfix=c-,d-,e-,g-,i-,s-,t-
+
 nmap <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>
 nmap <C-\>g :cs find g <C-R>=expand("<cword>")<CR><CR>
 nmap <C-\>c :cs find c <C-R>=expand("<cword>")<CR><CR>
@@ -112,6 +114,7 @@ map <F9> <C-W-W><CR>
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
+set rtp+=/usr/local/opt/fzf
 call vundle#begin()
 " alternatively, pass a path where Vundle should install plugins
 "call vundle#begin('~/some/path/here')
@@ -133,6 +136,8 @@ let g:vim_tags_auto_generate=1
 let g:autotagmaxTagsFileSize=1024 * 1024 * 7 * 100
 set autochdir
 set tags+=tags;
+set path=./**
+
 "autocmd vimenter * !ctags -R --exclude=node_modules --exclude=static 2>&1 &
 "autocmd vimenter * !echo kensuke
 
@@ -163,32 +168,37 @@ endtry
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Easier moving between windows
- 
+
 " YouCompleteMe
 " close the preview
 set completeopt-=preview
 let g:ycm_global_ycm_extra_conf='~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
 " ctags generate tag files
-let g:ycm_collect_identifiers_from_tag_files=1 
+let g:ycm_collect_identifiers_from_tag_files=1
 " ctrl + space => alt+ (CLang)
 let g:ycm_key_invoke_completion='<M-;>'
 " complete
 let g:ycm_seed_identifiers_with_syntax=1
-" prevent from showing the information about checking the ycm_extra_conf file 
-let g:ycm_confirm_extra_conf=0 
+" prevent from showing the information about checking the ycm_extra_conf file
+let g:ycm_confirm_extra_conf=0
 " regenerate matching items
 let g:ycm_cache_omnifunc=0
 " complete in comment
 let g:ycm_complete_in_comments=1
 " complete after typing the first character
-let g:ycm_min_num_of_chars_for_completion=1 
+let g:ycm_min_num_of_chars_for_completion=1
 " error hint
-let g:ycm_error_symbol='>>' 
+let g:ycm_error_symbol='>>'
 " Warning hint
 let g:ycm_warning_symbol='>*'
 "let g:ycm_use_ultisnips_completer = 0
 let g:ycm_server_keep_logfiles = 1
 let g:ycm_server_log_level = 'debug'
+
+" for java
+let g:syntastic_java_checkers = []
+let g:EclimFileTypeValidate = 0
+let g:EclimCompletionMethod = 'omnifunc'
 
 "NERDTree
 let NERDTreeIgnore=['.pyc', '.swp', '\.hi', '\.o$', '\~']
@@ -213,6 +223,8 @@ nnoremap <leader>ds d^
 nnoremap <leader>de d$
 nnoremap <leader>ys y^
 nnoremap <leader>ye y$
+nnoremap <leader>grl :Grep -i -r
+nnoremap <leader>gr :Grep -r
 nnoremap <c-v> <c-v>
 
 let g:haskell_enable_quantification = 1   " to enable highlighting of `forall`
@@ -236,6 +248,15 @@ let g:haskell_indent_case_alternative = 2
 
 let g:cabal_indent_section = 2
 
+let g:ale_sign_column_always = 1
+let g:ale_open_list = 1
+let g:ale_set_quickfix = 1
+let g:ale_linters = {
+            \'java': ['javac', 'javalsp', 'pmd'],
+            \'D': ['dls', 'dmd', 'uncrustify'],
+            \'javascript': ['eslint'],
+            \}
+
 "for Python
 nnoremap <leader>pyl :PymodeLint<cr>
 nnoremap <leader>pyf :PymodeLintAuto<cr>
@@ -246,8 +267,10 @@ nnoremap <leader>pyf :PymodeLintAuto<cr>
 "autocmd! InsertLeave * set imdisable|set iminsert=0
 "autocmd! InsertEnter * set noimdisable|set iminsert=0
 
-"se imd 
-"au InsertEnter * se noimd 
-"au InsertLeave * se imd 
+"se imd
+"au InsertEnter * se noimd
+"au InsertLeave * se imd
 "au FocusGained * se imd
 "
+
+set rubydll=/usr/local/Cellar/ruby/2.6.3/lib/libruby.2.6.dylib
