@@ -272,5 +272,3 @@ nnoremap <leader>pyf :PymodeLintAuto<cr>
 "au InsertLeave * se imd
 "au FocusGained * se imd
 "
-
-set rubydll=/usr/local/Cellar/ruby/2.6.3/lib/libruby.2.6.dylib
